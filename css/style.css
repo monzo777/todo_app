@@ -5,3 +5,7 @@ h1 {
 form {
   margin-bottom: 1em;
 }
+
+.delete-link {
+  float: right;
+}

@@ -42,6 +42,20 @@ class Todos {
       .then((json) => this.#addTask(json));
   }
 
+  removeTask(id) {
+    return fetch(`${this.#backendUrl}/delete/${id}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to delete task");
+        }
+
+        return response.json();
+      })
+      .then((json) => this.#removeTask(json.id));
+  }
+
   #readJson(json) {
     this.#tasks = json.map((item) => new Task(item.id, item.description));
   }
@@ -50,6 +64,11 @@ class Todos {
     const task = new Task(json.id, json.description);
     this.#tasks.push(task);
     return task;
+  }
+
+  #removeTask(id) {
+    this.#tasks = this.#tasks.filter((task) => task.getId() !== Number(id));
+    return Number(id);
   }
 }
 

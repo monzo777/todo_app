@@ -8,3 +8,7 @@ Content-Type: application/json
 {
   "description": "Study Node.js backend"
 }
+
+###
+
+DELETE http://localhost:3001/delete/1

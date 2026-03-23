@@ -54,6 +54,20 @@ app.post("/new", async (request, response) => {
   }
 });
 
+app.delete("/delete/:id", async (request, response) => {
+  const pool = openDb();
+  const { id } = request.params;
+
+  try {
+    await pool.query("DELETE FROM task WHERE id = $1", [id]);
+    response.status(200).json({ id: Number(id) });
+  } catch (error) {
+    response.status(500).json({ error: error.message });
+  } finally {
+    await pool.end();
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

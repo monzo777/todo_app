@@ -4,11 +4,47 @@ const todoList = document.querySelector("#todo-list");
 const todoInput = document.querySelector("#todo-input");
 const todos = new Todos("http://localhost:3001");
 
+function renderSpan(listItem, text) {
+  const span = document.createElement("span");
+  span.textContent = text;
+  listItem.appendChild(span);
+}
+
+function renderLink(listItem, taskId) {
+  const link = document.createElement("a");
+  link.href = "#";
+  link.className = "delete-link";
+
+  const icon = document.createElement("i");
+  icon.className = "bi bi-trash";
+
+  link.appendChild(icon);
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    todos.removeTask(taskId)
+      .then((deletedTaskId) => {
+        const taskElement = todoList.querySelector(`[data-key="${deletedTaskId}"]`);
+
+        if (taskElement) {
+          taskElement.remove();
+        }
+      })
+      .catch((error) => {
+        console.error("Unable to delete task:", error);
+      });
+  });
+
+  listItem.appendChild(link);
+}
+
 function renderTask(task) {
   const listItem = document.createElement("li");
   listItem.className = "list-group-item";
-  listItem.textContent = task.getText();
-  listItem.dataset.id = task.getId();
+  listItem.dataset.key = task.getId();
+
+  renderSpan(listItem, task.getText());
+  renderLink(listItem, task.getId());
 
   todoList.appendChild(listItem);
 }
