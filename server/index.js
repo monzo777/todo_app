@@ -31,7 +31,7 @@ app.get("/", async (_request, response) => {
   }
 });
 
-app.post("/", async (request, response) => {
+app.post("/new", async (request, response) => {
   const { description } = request.body;
 
   if (!description || description.trim() === "") {
